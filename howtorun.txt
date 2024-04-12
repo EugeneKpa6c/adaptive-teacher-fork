@@ -1,0 +1,30 @@
+docker build -t at -f C:\Users\ivanin.em.MAIN\Desktop\adaptive_teacher\Dockerfile .
+docker run --gpus all --shm-size=8gb -it at
+
+=============================
+
+python3 train_net.py \
+      --num-gpus 1 \
+      --config configs/faster_rcnn_R101_cross_clipart.yaml\
+      OUTPUT_DIR output/exp_clipart
+
+=============================
+
+Для BDD100k:
+
+python3 train_net.py \
+      --num-gpus 1 \
+      --config configs/faster_rcnn_R50_bdd100k.yaml \
+      OUTPUT_DIR output/bdd100k
+
+
+python3 train_net.py \
+      --eval-only \
+      --num-gpus 1 \
+      --config configs/faster_rcnn_R50_bdd100k.yaml \
+      MODEL.WEIGHTS /app/output/bdd100k/model_0034999.pth
+
+python3 eval.py \
+      --eval-only \
+      --config configs/faster_rcnn_R50_bdd100k.yaml \
+      MODEL.WEIGHTS output/bdd100k/model_0034999.pth
